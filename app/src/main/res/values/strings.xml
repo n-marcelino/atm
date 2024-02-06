@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">ATM Machine</string>
+    <string name="pin">Enter your PIN</string>
+    <string name="login">Log-in</string>
+    <string name="please">Please enter your PIN to proceed.</string>
+
+    <string name="welcome">Welcome</string>
+    <string name="choose">What would you like to do?</string>
+
+
+    <string name="balance">Balance</string>
+    <string name="currentbal">Your current balance is:</string>
+
+    <string name="bal">Balance Inquiry</string>
+    <string name="deposit">Deposit Cash</string>
+    <string name="transfer">Transfer Money</string>
+    <string name="withdraw">Withdraw Cash</string>
+    <string name="logout">log-out</string>
+    <string name="back">Go back</string>
+</resources>
