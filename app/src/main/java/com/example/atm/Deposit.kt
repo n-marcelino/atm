@@ -12,11 +12,6 @@ import androidx.appcompat.app.AlertDialog
 
 class Deposit : AppCompatActivity() {
 
-    private var currentBalance: Double = 10000.0
-    private lateinit var editTextNumber: EditText
-    private lateinit var balanceTextView: TextView
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deposit)

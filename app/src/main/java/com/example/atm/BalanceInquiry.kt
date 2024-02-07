@@ -13,17 +13,21 @@ class BalanceInquiry : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bal)
 
-        val btn_back = findViewById<Button>(R.id.btn_back)
-
-        btn_back.setOnClickListener {
-            val intent = Intent(this, Dashboard::class.java)
-            startActivity(intent)
-        }
-
         // Get values from previous activity
         var balance = intent.getIntExtra("newBalance", 10000)
         val balanceText = findViewById<TextView>(R.id.balance)
         balanceText.setText(balance.toString() +" PHP")
         var referenceNo = intent.getIntExtra("newReference", 100)
+
+        val btn_back = findViewById<Button>(R.id.btn_back)
+
+        btn_back.setOnClickListener {
+            val intent = Intent(this, Dashboard::class.java)
+            intent.putExtra("newBalance", balance)
+            intent.putExtra("newReference", referenceNo)
+            startActivity(intent)
+        }
+
+
     }
 }

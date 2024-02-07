@@ -9,91 +9,116 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 
 class Withdraw : AppCompatActivity() {
-
-    private var currentBalance: Double = 10000.0
-    private lateinit var editTextNumber: EditText
-    private lateinit var balanceTextView: TextView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_withdraw)
 
-        editTextNumber = findViewById(R.id.editTextNumber)
-        balanceTextView = findViewById(R.id.balance)
+        // Get values from previous activity
+        var balance = intent.getIntExtra("newBalance", 10000)
+        val balanceText = findViewById<TextView>(R.id.balance)
+        balanceText.setText(balance.toString() +" PHP")
+        var referenceNo = intent.getIntExtra("newReference", 100)
 
-        // Set the initial balance amount in the TextView
-        updateBalanceText()
+        // Buttons
+        val deleteButton = findViewById<Button>(R.id.delete)
+        val submitButton = findViewById<Button>(R.id.btn_withdraw)
+        val backButton = findViewById<Button>(R.id.btn_back)
+
+        // Make withdraw field variable
+        val withdrawForm = findViewById<EditText>(R.id.editTextNumber)
+        withdrawForm.setShowSoftInputOnFocus(false)
 
         // Set click listeners for numeric buttons
-        setNumericButtonClickListeners()
+        // NumPad UI
+        val buttonNum0 = findViewById<Button>(R.id.buttonNum0)
+        val buttonNum1 = findViewById<Button>(R.id.buttonNum1)
+        val buttonNum2 = findViewById<Button>(R.id.buttonNum2)
+        val buttonNum3 = findViewById<Button>(R.id.buttonNum3)
+        val buttonNum4 = findViewById<Button>(R.id.buttonNum4)
+        val buttonNum5 = findViewById<Button>(R.id.buttonNum5)
+        val buttonNum6 = findViewById<Button>(R.id.buttonNum6)
+        val buttonNum7 = findViewById<Button>(R.id.buttonNum7)
+        val buttonNum8 = findViewById<Button>(R.id.buttonNum8)
+        val buttonNum9 = findViewById<Button>(R.id.buttonNum9)
 
-        // Set click listener for the "Delete" button
-        findViewById<Button>(R.id.delete).setOnClickListener {
-            onDeleteButtonClick()
+        // Set on click listener for all number button
+        buttonNum0.setOnClickListener(){ writeForm(0, withdrawForm) }
+        buttonNum1.setOnClickListener(){ writeForm(1, withdrawForm) }
+        buttonNum2.setOnClickListener(){ writeForm(2, withdrawForm) }
+        buttonNum3.setOnClickListener(){ writeForm(3, withdrawForm) }
+        buttonNum4.setOnClickListener(){ writeForm(4, withdrawForm) }
+        buttonNum5.setOnClickListener(){ writeForm(5, withdrawForm) }
+        buttonNum6.setOnClickListener(){ writeForm(6, withdrawForm) }
+        buttonNum7.setOnClickListener(){ writeForm(7, withdrawForm) }
+        buttonNum8.setOnClickListener(){ writeForm(8, withdrawForm) }
+        buttonNum9.setOnClickListener(){ writeForm(9, withdrawForm) }
+
+        // Set on click listener for delete button
+        deleteButton.setOnClickListener(){ reduceForm(withdrawForm) }
+
+        // Set on click listener for submit button
+        submitButton.setOnClickListener {
+
+            //Makes Alert Dialog
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+            // Checks if withdraw amount is empty or higher than balance
+            if(withdrawForm.text.toString() == ""){
+                Toast.makeText(
+                    this,
+                    "Please insert amount first",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if(withdrawForm.text.toString().toInt() > balance){
+                Toast.makeText(
+                    this,
+                    "Withdraw amount higher than balance",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            // Shows alert dialog once withdraw amount is submitted
+            else{
+                builder
+                    .setMessage("You will withdraw: "+ withdrawForm.text.toString()+ " PHP")
+                    .setTitle("Confirm Details Before Continuing!")
+                    .setPositiveButton("Continue") { dialog, which ->
+                        balance = balance - withdrawForm.text.toString().toInt()
+                        balanceText.setText(balance.toString() +" PHP")
+                        withdrawForm.setText("")
+                        Toast.makeText(
+                            this,
+                            "Your new balance is:" + balance + " PHP",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }.setNegativeButton("Cancel") { dialog, which ->
+                    }
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
+
+            }
         }
 
-        // Set click listener for the "Withdraw" button
-        findViewById<Button>(R.id.btn_withdraw).setOnClickListener {
-            onWithdrawButtonClick()
-        }
-
-        val btn_back = findViewById<Button>(R.id.btn_back)
-
-        btn_back.setOnClickListener {
+        //Return to dashboard
+        backButton.setOnClickListener {
             val intent = Intent(this, Dashboard::class.java)
+            intent.putExtra("newBalance", balance)
+            intent.putExtra("newReference", referenceNo)
             startActivity(intent)
         }
     }
-    private fun setNumericButtonClickListeners() {
-        val numericButtonIds = arrayOf(
-            R.id.buttonNum0, R.id.buttonNum1, R.id.buttonNum2,
-            R.id.buttonNum3, R.id.buttonNum4, R.id.buttonNum5,
-            R.id.buttonNum6, R.id.buttonNum7, R.id.buttonNum8, R.id.buttonNum9
-        )
 
-        for (buttonId in numericButtonIds) {
-            findViewById<Button>(buttonId).setOnClickListener {
-                onNumericButtonClick(it)
-            }
-        }
+    // Function to let the number button UI write in the withdraw amount field
+    fun writeForm(num : Int, amount : EditText){
+        amount.setText(amount.text.toString() + num.toString())
     }
 
-    private fun onNumericButtonClick(view: View) {
-        val buttonText = (view as Button).text.toString()
-        editTextNumber.append(buttonText)
-    }
-
-    private fun onDeleteButtonClick() {
-        val currentText = editTextNumber.text.toString()
-        if (currentText.isNotEmpty()) {
-            val updatedText = currentText.substring(0, currentText.length - 1)
-            editTextNumber.text.clear()
-            editTextNumber.text.insert(0, updatedText)
-        }
-    }
-
-    private fun onWithdrawButtonClick() {
-        val amountText = editTextNumber.text.toString()
-        if (amountText.isNotEmpty()) {
-            val withdrawAmount = amountText.toDouble()
-            if (withdrawAmount <= currentBalance) {
-                currentBalance -= withdrawAmount
-                updateBalanceText()
-                // You can add additional logic for withdraw functionality here
-                // For example, update the backend or show a success message
-                Toast.makeText(this@Withdraw, "Withdrawal successful", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@Withdraw, "Insufficient balance", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Toast.makeText(this@Withdraw, "Please enter a valid amount", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun updateBalanceText() {
-        balanceTextView.text = String.format("%.2f PHP", currentBalance)
+    // Function to let the button UI delete(backspace) in the withdraw amount field
+    fun reduceForm(amount : EditText){
+        amount.setText(amount.text.toString().dropLast(1))
     }
 }

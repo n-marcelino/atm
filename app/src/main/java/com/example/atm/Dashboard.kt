@@ -24,38 +24,38 @@ class Dashboard : AppCompatActivity() {
         val btn_logout = findViewById<Button>(R.id.btn_logout)
 
         btn_bal.setOnClickListener {
-            val intent_bal = Intent(this, BalanceInquiry::class.java)
+            val intent = Intent(this, BalanceInquiry::class.java)
             intent.putExtra("newBalance", balance)
             intent.putExtra("newReference", referenceNo)
-            startActivity(intent_bal)
+            startActivity(intent)
         }
 
         btn_deposit.setOnClickListener {
-            val intent_deposit = Intent(this, Deposit::class.java)
+            val intent = Intent(this, Deposit::class.java)
             intent.putExtra("newBalance", balance)
             intent.putExtra("newReference", referenceNo)
-            startActivity(intent_deposit)
+            startActivity(intent)
         }
 
         btn_withdraw.setOnClickListener {
-            val intent_withdraw = Intent(this, Withdraw::class.java)
+            val intent = Intent(this, Withdraw::class.java)
             intent.putExtra("newBalance", balance)
             intent.putExtra("newReference", referenceNo)
-            startActivity(intent_withdraw)
+            startActivity(intent)
         }
 
         btn_transfer.setOnClickListener {
-            val intent_transfer = Intent(this, Transfer::class.java)
+            val intent = Intent(this, Transfer::class.java)
             intent.putExtra("newBalance", balance)
             intent.putExtra("newReference", referenceNo)
-            startActivity(intent_transfer)
+            startActivity(intent)
         }
 
         btn_logout.setOnClickListener {
-//            val intent_logout = Intent(this, MainActivity::class.java)
-//            startActivity(intent_logout)
-            moveTaskToBack(true)
-            exitProcess(-1)
+            val intent_logout = Intent(this, MainActivity::class.java)
+            startActivity(intent_logout)
+//            moveTaskToBack(true)
+//            exitProcess(-1)
         }
     }
 }
