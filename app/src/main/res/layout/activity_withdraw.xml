@@ -107,25 +107,26 @@
                 android:layout_marginEnd="45dp">
 
                 <Button
-                    android:id="@+id/buttonNum8"
-                    android:layout_width="61dp"
-                    android:layout_height="49dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="#558B2F"
-                    android:text="8"
-                    app:layout_constraintStart_toEndOf="@+id/buttonNum7"
-                    app:layout_constraintTop_toBottomOf="@+id/secondNum" />
-
-                <Button
                     android:id="@+id/buttonNum7"
                     android:layout_width="61dp"
                     android:layout_height="49dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:backgroundTint="#558B2F"
                     android:text="7"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/secondNum" />
+
+
+                <Button
+                    android:id="@+id/buttonNum8"
+                    android:layout_width="61dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#558B2F"
+                    android:text="8"
+                    app:layout_constraintStart_toEndOf="@+id/buttonNum7"
                     app:layout_constraintTop_toBottomOf="@+id/secondNum" />
 
                 <Button
